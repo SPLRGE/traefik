@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPLRGE · Traefik admin center</title>
+
+  @vite(['resources/js/app.js'])
+</head>
+<body>
+<div class="page">
+  @!sidebar()
+
+  <div class="page-wrapper">
+    <div class="page-header">
+      <div class="container-xl">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <h2 class="page-title">
+              SSL Certs
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="container-xl">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Certs</h3>
+          </div>
+          <div class="card-body border-bottom py-3">
+            <div class="d-flex">
+              <div class="ms-auto text-muted">
+                <button href="#" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-add">
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table card-table table-vcenter text-nowrap datatable">
+              <thead>
+              <tr>
+                <!--<th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>-->
+                <th class="w-1">ID</th>
+                <th>Name</th>
+                <th>Created at</th>
+                <!--<th>Client</th>
+                <th>VAT No.</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Price</th>-->
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td><span class="text-muted">01</span></td>
+                <td>
+                  [cloudflare] splrge.dev
+                </td>
+                <td>
+                  2024-04-30 12:00:00
+                </td>
+                <td class="text-end">
+                  <div class="btn-list flex-nowrap justify-content-end">
+                    <button href="#" class="btn btn-primary" disabled>
+                      Edit
+                    </button>
+                    <a href="#" class="btn btn-danger">
+                      Remove
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal modal-blur fade" id="modal-add" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">New SSL cert</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!--<div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" name="cert-name" placeholder="[cloudflare] victor.kiwi">
+              </div>
+            </div>-->
+            <form action="{{ route('dashboard.index') }}" method="POST">
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="name" class="form-label">Cert name</label>
+                      <input id="name" name="name" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div>
+                      <label for="key" class="form-label">Key</label>
+                      <textarea id="key" name="key" class="form-control" rows="3"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div>
+                      <label for="certificate" class="form-label">Certificate</label>
+                      <textarea id="certificate" name="certificate" class="form-control" rows="3"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                  Cancel
+                </a>
+                <button type="submit" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                  Create new certificate
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -9,12 +9,14 @@
 
 import router from '@adonisjs/core/services/router'
 import AuthController from "#controllers/auth_controller";
-
-router.on('/').render('pages/home')
+import {middleware} from "#start/kernel";
 
 router.group(() => {
-  router.get('/redirect', [AuthController, 'redirect'])
-  router.get('/callback', [AuthController, 'callback'])
-}).prefix('/auth')
+  router.get('/redirect', [AuthController, 'redirect']).as('redirect')
+  router.get('/callback', [AuthController, 'callback']).as('callback')
+}).prefix('/auth').as('auth')
 
-
+router.group(() => {
+  router.on('/').render('pages/home').as('index')
+  router.on('/certs').render('pages/certs').as('certs')
+}).as('dashboard').use(middleware.auth())
