@@ -16,7 +16,6 @@ import server from '@adonisjs/core/services/server'
  * to a HTTP response.
  */
 server.errorHandler(() => import('#exceptions/handler'))
-
 /**
  * The server middleware stack runs middleware on all the HTTP
  * requests, even if there is no route registered for

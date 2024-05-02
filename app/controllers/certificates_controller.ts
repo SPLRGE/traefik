@@ -1,12 +1,20 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import {createCertificateValidator} from "#validators/certificate";
+import Certificate from "#models/certificate";
 
 export default class CertificatesController {
 
   async index({ view }: HttpContext) {
-    return view.render('certs')
+    const certificates = await Certificate.query().orderBy('id', 'asc')
+    return view.render('pages/certs', { certificates: certificates.map(cert => cert.serialize()) })
   }
 
-  async store({ response }: HttpContext) {
-    return response.internalServerError({ unimplemented: true })
+  async store({ request, response, session }: HttpContext) {
+    const payload = await request.validateUsing(createCertificateValidator)
+
+    await Certificate.create(payload)
+
+    session.flash('success', 'Certificate created successfully')
+    return response.redirect().toRoute('dashboard.certs.index')
   }
 }

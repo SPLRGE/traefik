@@ -26,6 +26,41 @@
 
     <div class="page-body">
       <div class="container-xl">
+
+        @if(flashMessages.has('inputErrorsBag'))
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <div class="d-flex">
+              <div>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-exclamation-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 9v4" /><path d="M12 16v.01" /></svg>
+              </div>
+              <div>
+                <h4 class="alert-title">Please complete the form correctly</h4>
+                <div class="text-secondary">
+                  @each(error in Object.keys(flashMessages.get('inputErrorsBag')))
+                    @each(message in flashMessages.get('inputErrorsBag')[error])
+                      {{ message }}<br />
+                    @end
+                  @end
+                </div>
+              </div>
+            </div>
+            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+          </div>
+        @end
+
+        @if(flashMessages.has('success'))
+          <div class="alert alert-success alert-dismissible" role="alert">
+            <div class="d-flex">
+              <div>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-dashed-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95" /><path d="M3.69 8.56a9 9 0 0 0 -.69 3.44" /><path d="M3.69 15.44a9 9 0 0 0 1.95 2.92" /><path d="M8.56 20.31a9 9 0 0 0 3.44 .69" /><path d="M15.44 20.31a9 9 0 0 0 2.92 -1.95" /><path d="M20.31 15.44a9 9 0 0 0 .69 -3.44" /><path d="M20.31 8.56a9 9 0 0 0 -1.95 -2.92" /><path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69" /><path d="M9 12l2 2l4 -4" /></svg>              </div>
+              <div>
+                <h4 class="alert-title">{{ old('success') }}</h4>
+              </div>
+            </div>
+            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+          </div>
+        @end
+
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Certs</h3>
@@ -42,39 +77,41 @@
           <div class="table-responsive">
             <table class="table card-table table-vcenter text-nowrap datatable">
               <thead>
-              <tr>
-                <!--<th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>-->
-                <th class="w-1">ID</th>
-                <th>Name</th>
-                <th>Created at</th>
-                <!--<th>Client</th>
-                <th>VAT No.</th>
-                <th>Created</th>
-                <th>Status</th>
-                <th>Price</th>-->
-                <th></th>
-              </tr>
+                <tr>
+                  <!--<th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>-->
+                  <th class="w-1">ID</th>
+                  <th>Name</th>
+                  <th>Created at</th>
+                  <!--<th>Client</th>
+                  <th>VAT No.</th>
+                  <th>Created</th>
+                  <th>Status</th>
+                  <th>Price</th>-->
+                  <th></th>
+                </tr>
               </thead>
               <tbody>
-              <tr>
-                <td><span class="text-muted">01</span></td>
-                <td>
-                  [cloudflare] splrge.dev
-                </td>
-                <td>
-                  2024-04-30 12:00:00
-                </td>
-                <td class="text-end">
-                  <div class="btn-list flex-nowrap justify-content-end">
-                    <button href="#" class="btn btn-primary" disabled>
-                      Edit
-                    </button>
-                    <a href="#" class="btn btn-danger">
-                      Remove
-                    </a>
-                  </div>
-                </td>
-              </tr>
+                @each(certificate in certificates)
+                  <tr>
+                    <td><span class="text-muted">{{ certificate.id }}</span></td>
+                    <td>
+                      {{ certificate.name }}
+                    </td>
+                    <td>
+                      {{ luxon.fromISO(certificate.createdAt).toFormat('dd/MM/yyyy HH:mm') }}
+                    </td>
+                    <td class="text-end">
+                      <div class="btn-list flex-nowrap justify-content-end">
+                        <button href="#" class="btn btn-primary" disabled>
+                          Edit
+                        </button>
+                        <a href="#" class="btn btn-danger">
+                          Remove
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                @end
               </tbody>
             </table>
           </div>
@@ -95,7 +132,8 @@
                 <input type="text" class="form-control" name="cert-name" placeholder="[cloudflare] victor.kiwi">
               </div>
             </div>-->
-            <form action="{{ route('dashboard.index') }}" method="POST">
+            <form action="{{ route('dashboard.certs.store') }}" method="POST">
+              {{ csrfField() }}
               <div class="modal-body">
                 <div class="row">
                   <div class="col-lg-6">

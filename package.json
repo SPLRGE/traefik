@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
-    "dev": "node ace serve --watch",
+    "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -65,6 +65,7 @@
     "@vinejs/vine": "^2.0.0",
     "better-sqlite3": "^9.6.0",
     "edge.js": "^6.0.2",
+    "lodash": "^4.17.21",
     "luxon": "^3.4.4",
     "reflect-metadata": "^0.2.2"
   },
