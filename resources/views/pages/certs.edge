@@ -105,9 +105,12 @@
                         <button href="#" class="btn btn-primary" disabled>
                           Edit
                         </button>
-                        <a href="#" class="btn btn-danger">
-                          Remove
-                        </a>
+                        <form action="{{ route('dashboard.certs.destroy', [certificate.id]) }}?_method=DELETE" method="POST">
+                          {{ csrfField() }}
+                          <button type="submit" class="btn btn-danger">
+                            Remove
+                          </button>
+                        </form>
                       </div>
                     </td>
                   </tr>

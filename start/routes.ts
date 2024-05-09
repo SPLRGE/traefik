@@ -19,5 +19,5 @@ router.group(() => {
 
 router.group(() => {
   router.on('/').render('pages/home').as('index')
-  router.resource('/certs', CertificatesController).only(['index', 'store']).as('certs')
+  router.resource('/certs', CertificatesController).only(['index', 'store', 'destroy']).as('certs')
 }).as('dashboard').use(middleware.auth())

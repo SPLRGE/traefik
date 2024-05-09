@@ -17,4 +17,12 @@ export default class CertificatesController {
     session.flash('success', 'Certificate created successfully')
     return response.redirect().toRoute('dashboard.certs.index')
   }
+
+  async destroy({ params, response, session }: HttpContext) {
+    const certificate = await Certificate.findOrFail(params.id)
+    await certificate.delete()
+
+    session.flash('success', 'Certificate deleted successfully')
+    return response.redirect().toRoute('dashboard.certs.index')
+  }
 }
