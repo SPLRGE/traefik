@@ -21,6 +21,17 @@ const loggerConfig = defineConfig({
           .toArray(),
       },
     },
+    traefik: {
+      enabled: true,
+      name: 'traefik',
+      level: 'info',
+      transport: {
+        targets: targets()
+          .pushIf(!app.inProduction, targets.pretty())
+          .pushIf(app.inProduction, targets.file({ destination: 2 }))
+          .toArray(),
+      },
+    }
   },
 })
 
