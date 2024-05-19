@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPLRGE · Traefik admin center</title>
+
+  @vite(['resources/js/app.js'])
+</head>
+<body>
+<div class="page">
+  @!sidebar()
+
+  <div class="page-wrapper">
+    <div class="page-header">
+      <div class="container-xl">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <h2 class="page-title">
+              Routes
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="container-xl">
+
+        @if(flashMessages.has('inputErrorsBag'))
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <div class="d-flex">
+              <div>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-exclamation-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 9v4" /><path d="M12 16v.01" /></svg>
+              </div>
+              <div>
+                <h4 class="alert-title">Please complete the form correctly</h4>
+                <div class="text-secondary">
+                  @each(error in Object.keys(flashMessages.get('inputErrorsBag')))
+                    @each(message in flashMessages.get('inputErrorsBag')[error])
+                      {{ message }}<br />
+                    @end
+                  @end
+                </div>
+              </div>
+            </div>
+            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+          </div>
+        @end
+
+        @if(flashMessages.has('success'))
+          <div class="alert alert-success alert-dismissible" role="alert">
+            <div class="d-flex">
+              <div>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-dashed-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.56 3.69a9 9 0 0 0 -2.92 1.95" /><path d="M3.69 8.56a9 9 0 0 0 -.69 3.44" /><path d="M3.69 15.44a9 9 0 0 0 1.95 2.92" /><path d="M8.56 20.31a9 9 0 0 0 3.44 .69" /><path d="M15.44 20.31a9 9 0 0 0 2.92 -1.95" /><path d="M20.31 15.44a9 9 0 0 0 .69 -3.44" /><path d="M20.31 8.56a9 9 0 0 0 -1.95 -2.92" /><path d="M15.44 3.69a9 9 0 0 0 -3.44 -.69" /><path d="M9 12l2 2l4 -4" /></svg>              </div>
+              <div>
+                <h4 class="alert-title">{{ old('success') }}</h4>
+              </div>
+            </div>
+            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+          </div>
+        @end
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Routes</h3>
+          </div>
+          <div class="card-body border-bottom py-3">
+            <div class="d-flex">
+              <div class="ms-auto text-muted">
+                <button href="#" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-add">
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table card-table table-vcenter text-nowrap datatable">
+              <thead>
+                <tr>
+                  <th class="w-1">ID</th>
+                  <th>Name</th>
+                  <th>Rules</th>
+                  <th>Service</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @each(traefikRoute in routes)
+                  <tr>
+                    <td><span class="text-muted">{{ traefikRoute.id }}</span></td>
+                    <td>
+                      {{ traefikRoute.name }}
+                    </td>
+                    <td>
+                      {{ traefikRoute.rules }}
+                    </td>
+                    <td>
+                      {{ services.find(svc => svc.id === traefikRoute.serviceId).id }} · {{ services.find(svc => svc.id === traefikRoute.serviceId).name }}
+                    </td>
+                    <td class="text-end">
+                      <div class="btn-list flex-nowrap justify-content-end">
+                        <button href="#" class="btn btn-primary" disabled>
+                          Edit
+                        </button>
+                        <form action="{{ route('dashboard.routes.destroy', [traefikRoute.id]) }}?_method=DELETE" method="POST">
+                          {{ csrfField() }}
+                          <button type="submit" class="btn btn-danger">
+                            Remove
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                @end
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal modal-blur fade" id="modal-add" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">New Route</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!--<div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" name="cert-name" placeholder="[cloudflare] victor.kiwi">
+              </div>
+            </div>-->
+            <form action="{{ route('dashboard.routes.store') }}" method="POST">
+              {{ csrfField() }}
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="name" class="form-label">Route name</label>
+                      <input id="name" name="name" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="name" class="form-label">TLS ?</label>
+                      <div class="form-selectgroup">
+                        <label class="form-selectgroup-item">
+                          <input id="tls-true" name="tls" value="true" type="radio" class="form-selectgroup-input">
+                          <span class="form-selectgroup-label">Yes</span>
+                        </label>
+                        <label class="form-selectgroup-item">
+                          <input id="tls-false" name="tls" value="false" type="radio" class="form-selectgroup-input">
+                          <span class="form-selectgroup-label">No</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="mb-3">
+                      <label for="rules" class="form-label">Rules</label>
+                      <input id="rules" name="rules" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="mb-3">
+                      <label for="service" class="form-label">Service</label>
+                      <select id="service" name="service" class="form-select" onchange="updateAddForm()">
+                        <option value="add-new">Add a new service</option>
+                        @each(service in services)
+                          <option value="{{ service.id }}">{{ service.id }} · {{ service.name }}</option>
+                        @end
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="service-add" class="modal-body">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="service-name" class="form-label">Service name</label>
+                      <input id="service-name" name="serviceName" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="service-type" class="form-label">Service type</label>
+                      <select id="service-type" name="serviceType" class="form-select" onchange="updateServiceAddressPrefix()">
+                        <option value="HTTP">HTTP</option>
+                        <option value="HTTPS">HTTPS</option>
+                        <option value="UDP">UDP</option>
+                        <option value="TCP">TCP</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="mb-3">
+                      <label for="service-address" class="form-label">Service address</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="service-address-prefix">http://</span>
+                        <input id="service-address" name="serviceAddress" type="text" class="form-control" placeholder="localhost:3000" autocomplete="off" data-form-type="other">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                  Cancel
+                </a>
+                <button type="submit" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                  Create new route
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const serviceSelect = document.getElementById('service')
+  const updateAddForm = () => {
+    if(serviceSelect.value === 'add-new') {
+      document.getElementById('service-add').classList.remove('d-none')
+    } else {
+      document.getElementById('service-add').classList.add('d-none')
+    }
+  }
+
+  const updateServiceAddressPrefix = () => {
+    const type = document.getElementById('service-type').value
+    document.getElementById('service-address-prefix').innerText = type.toLowerCase() + '://'
+  }
+</script>
+</body>
+</html>

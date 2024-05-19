@@ -22,9 +22,17 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('dashboard.certs.index') }}">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  @!icons.home()
+                  @!icons.lock()
                 </span>
             <span class="nav-link-title">SSL Certs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('dashboard.routes.index') }}">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  @!icons.routePoint()
+                </span>
+            <span class="nav-link-title">Routes</span>
           </a>
         </li>
       </ul>
