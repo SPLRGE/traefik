@@ -3,10 +3,11 @@ import app from "@adonisjs/core/services/app";
 import logger from "@adonisjs/core/services/logger";
 import got from "got";
 import { createWriteStream } from "node:fs";
-import {chmod, mkdir} from "node:fs/promises"
+import {chmod, mkdir, rm, writeFile } from "node:fs/promises"
 import { pathExists } from "../app/utils/file_util.js";
-import {promisify} from "node:util";
-import {pipeline} from "node:stream";
+import { promisify } from "node:util";
+import { pipeline } from "node:stream";
+import Certificate from "#models/certificate";
 
 const traefikLogger = logger.use('traefik')
 traefikLogger.info('Check if Traefik is installed')
@@ -32,12 +33,27 @@ if (!await pathExists(traefikServerPath)) {
   }
 }
 
+traefikLogger.info('Preparing SSL certificates')
+const certPath = app.tmpPath('traefik', 'certificates')
+
+if (await pathExists(certPath)) await rm(certPath, { recursive: true })
+await mkdir(certPath)
+
+const certificates = await Certificate.all()
+for (const certificate of certificates) {
+  await writeFile(app.tmpPath('traefik', 'certificates', `${certificate.id}.crt`), certificate.certificate)
+  await writeFile(app.tmpPath('traefik', 'certificates', `${certificate.id}.key`), certificate.key)
+}
+
+
+traefikLogger.info('Starting Traefik server')
 
 const traefik = spawn(traefikServerPath, [
   '--entryPoints.web.address=:80',
   '--entryPoints.websecure.address=:443',
   '--api.insecure=true',
   '--api.dashboard=true',
+  '--providers.http.endpoint=http://127.0.0.1:3333/api/config.json',
   '--accessLog=true',
   '--log.level=INFO',
 ])
@@ -52,4 +68,8 @@ traefik.stderr.on('data', (data) => {
 
 traefik.on('close', (code) => {
   traefikLogger.info(`Traefik server closed with code ${code}`)
+})
+
+process.on('beforeExit', () => {
+  traefik.kill()
 })
