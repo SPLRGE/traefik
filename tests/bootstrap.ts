@@ -27,7 +27,7 @@ export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
 }
 
 /**
- * Configure suites by tapping into the test suite instance.
+ * Configure suites by tapping into the test suite instance.ts.
  * Learn more - https://japa.dev/docs/test-suites#lifecycle-hooks
  */
 export const configureSuite: Config['configureSuite'] = (suite) => {

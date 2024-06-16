@@ -19,16 +19,15 @@ export default class TraefikController {
       }
     }
 
-
-    config.http = {  }
+    const httpConfiguration: {[k: string]: any} = {  }
 
     const services = await Service.all()
     if(services.length > 0) {
-      config.http.services = {  }
+      httpConfiguration.services = {  }
 
       for (const service of services) {
         if (service.type === 'HTTP' || service.type === 'HTTPS') {
-          config.http.services[service.id] = {
+          httpConfiguration.services[service.id] = {
             loadBalancer: {
               servers: service.addresses.map(address => ({url: `${service.type.toLowerCase()}://${address}`}))
             }
@@ -39,18 +38,19 @@ export default class TraefikController {
 
     const routes = await Route.all()
     if(routes.length > 0) {
-      config.http.routers = {  }
+      httpConfiguration.routers = {  }
 
       for(const route of routes) {
-        config.http.routers[route.id] = {
+        httpConfiguration.routers[route.id] = {
           rule: route.rules,
           service: route.serviceId,
         }
 
-        if(route.tls) config.http.routers[route.id].tls = {  }
+        if(route.tls) httpConfiguration.routers[route.id].tls = {  }
       }
     }
 
+    if(Object.keys(httpConfiguration).length > 0) config.http = httpConfiguration
     return response.json(config)
   }
 }

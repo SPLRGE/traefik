@@ -2,6 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import User from "#models/user";
 
 export default class AuthController {
+  constructor() {
+  }
 
   public async redirect({ ally }: HttpContext) {
     return ally.use('microsoft').redirect()

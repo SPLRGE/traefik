@@ -36,7 +36,8 @@ export default defineConfig({
     () => import('@adonisjs/static/static_provider'),
     () => import('@adonisjs/lucid/database_provider'),
     () => import('@adonisjs/auth/auth_provider'),
-    () => import('@adonisjs/ally/ally_provider')
+    () => import('@adonisjs/ally/ally_provider'),
+    () => import('#providers/traefik_provider')
   ],
 
   /*
@@ -47,7 +48,7 @@ export default defineConfig({
   | List of modules to import before starting the application.
   |
   */
-  preloads: [() => import('#start/routes'), () => import('#start/kernel'), () => import('#start/edge'), () => import('#start/traefik')],
+  preloads: [() => import('#start/routes'), () => import('#start/kernel'), () => import('#start/edge')],
 
   /*
   |--------------------------------------------------------------------------
