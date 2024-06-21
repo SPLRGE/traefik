@@ -11,7 +11,7 @@ USER node
 # -- INSTALL DEPENDENCIES --
 FROM prepare AS dependencies
 COPY --chown=node:node package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --prod
 
 # -- BUILD APPLICATION --
 FROM dependencies AS build
@@ -23,4 +23,4 @@ FROM prepare as final
 ENV NODE_ENV=production
 COPY --from=build --chown=node:node /app/build .
 COPY --from=dependencies --chown=node:node /app/node_modules ./node_modules
-CMD ["/bin/sh", "-c", "node ace migration:run;dumb-init node server.js"]
+CMD ["/bin/sh", "-c", "node ace migration:run --force;dumb-init node bin/server.js"]
