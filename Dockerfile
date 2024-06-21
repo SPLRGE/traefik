@@ -19,7 +19,7 @@ COPY --chown=node:node . .
 RUN pnpm build
 
 # -- INSTALL PRODUCTION DEPENDENCIES --
-FROM prepapre as productionDependencies
+FROM prepare as productionDependencies
 COPY --chown=node:node package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
