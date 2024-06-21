@@ -9,12 +9,12 @@ const allyConfig = defineConfig({
     callbackUrl: '',
   }),*/
   microsoft: MicrosoftService({
-    clientId: env.get('MICROSOFT_CLIENT_ID'),
-    clientSecret: env.get('MICROSOFT_CLIENT_SECRET'),
+    clientId: env.get('MICROSOFT_CLIENT_ID', ''),
+    clientSecret: env.get('MICROSOFT_CLIENT_SECRET', ''),
     callbackUrl: env.get('APP_URL') + '/auth/callback',
-    authorizeUrl: 'https://login.microsoftonline.com/cc89672c-6f50-4af7-bb83-f9ce9b05b80e/oauth2/v2.0/authorize',
-    accessTokenUrl: 'https://login.microsoftonline.com/cc89672c-6f50-4af7-bb83-f9ce9b05b80e/oauth2/v2.0/token',
-    userInfoUrl: 'https://graph.microsoft.com/v1.0/cc89672c-6f50-4af7-bb83-f9ce9b05b80e/me',
+    authorizeUrl: `https://login.microsoftonline.com/${env.get('MICROSOFT_TENANT_ID', 'common')}/oauth2/v2.0/authorize`,
+    accessTokenUrl: `https://login.microsoftonline.com/${env.get('MICROSOFT_TENANT_ID', 'common')}/oauth2/v2.0/token`,
+    userInfoUrl: 'https://graph.microsoft.com/v1.0' + (env.get('MICROSOFT_TENANT_ID') ? `/${env.get('MICROSOFT_TENANT_ID')}/` : '') + 'me',
     scopes: ['openid', 'email', 'profile', 'offline_access']
   }),
 })
