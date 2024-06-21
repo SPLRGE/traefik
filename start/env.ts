@@ -33,6 +33,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   /*DISCORD_CLIENT_ID: Env.schema.string(),
   DISCORD_CLIENT_SECRET: Env.schema.string()*/
-  MICROSOFT_CLIENT_ID: Env.schema.string(),
-  MICROSOFT_CLIENT_SECRET: Env.schema.string(),
+  MICROSOFT_CLIENT_ID: Env.schema.string.optional(),
+  MICROSOFT_CLIENT_SECRET: Env.schema.string.optional(),
+  MICROSOFT_TENANT_ID: Env.schema.string.optional(),
 })

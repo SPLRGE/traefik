@@ -16,6 +16,8 @@ import RoutesController from "#controllers/routes_controller";
 import ServicesController from "#controllers/services_controller";
 
 router.group(() => {
+  router.on('/').render('pages/auth/login').as('index')
+
   router.get('/redirect', [AuthController, 'redirect']).as('redirect')
   router.get('/callback', [AuthController, 'callback']).as('callback')
 }).prefix('/auth').as('auth')
