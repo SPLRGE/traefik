@@ -8,19 +8,24 @@ WORKDIR /app
 RUN npm install -g pnpm
 USER node
 
-# -- INSTALL DEPENDENCIES --
+# -- INSTALL ALL DEPENDENCIES --
 FROM prepare AS dependencies
 COPY --chown=node:node package.json pnpm-lock.yaml ./
-RUN pnpm install --prod
+RUN pnpm install --frozen-lockfile
 
 # -- BUILD APPLICATION --
 FROM dependencies AS build
 COPY --chown=node:node . .
 RUN pnpm build
 
+# -- INSTALL PRODUCTION DEPENDENCIES --
+FROM prepapre as productionDependencies
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
+
 # -- FINAL IMAGE --
 FROM prepare as final
 ENV NODE_ENV=production
 COPY --from=build --chown=node:node /app/build .
-COPY --from=dependencies --chown=node:node /app/node_modules ./node_modules
+COPY --from=productionDependencies --chown=node:node /app/node_modules ./node_modules
 CMD ["/bin/sh", "-c", "node ace migration:run --force;dumb-init node bin/server.js"]
