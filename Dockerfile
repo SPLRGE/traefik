@@ -4,6 +4,7 @@ ARG NODE_IMAGE=node:20-alpine
 FROM $NODE_IMAGE AS prepare
 RUN apk --no-cache add dumb-init
 RUN mkdir -p /app && chown node:node /app
+RUN mkdir -p /app/tmp && chown node:node /app/tmp
 WORKDIR /app
 RUN npm install -g pnpm
 USER node
