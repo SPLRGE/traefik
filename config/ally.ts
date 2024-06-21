@@ -11,7 +11,7 @@ const allyConfig = defineConfig({
   microsoft: MicrosoftService({
     clientId: env.get('MICROSOFT_CLIENT_ID'),
     clientSecret: env.get('MICROSOFT_CLIENT_SECRET'),
-    callbackUrl: 'http://localhost:3333/auth/callback',
+    callbackUrl: env.get('APP_URL') + '/auth/callback',
     authorizeUrl: 'https://login.microsoftonline.com/cc89672c-6f50-4af7-bb83-f9ce9b05b80e/oauth2/v2.0/authorize',
     accessTokenUrl: 'https://login.microsoftonline.com/cc89672c-6f50-4af7-bb83-f9ce9b05b80e/oauth2/v2.0/token',
     userInfoUrl: 'https://graph.microsoft.com/v1.0/cc89672c-6f50-4af7-bb83-f9ce9b05b80e/me',
