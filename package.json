@@ -63,6 +63,7 @@
     "@adonisjs/vite": "^2.0.2",
     "@splrge/ally-microsoft-provider": "^1.0.1",
     "@vinejs/vine": "^2.0.0",
+    "argon2": "^0.40.3",
     "better-sqlite3": "^9.6.0",
     "edge.js": "^6.0.2",
     "got": "^14.3.0",
