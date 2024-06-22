@@ -5,7 +5,9 @@ import Route from "#models/route";
 
 export default class TraefikController {
 
-  public async config({ response }: HttpContext) {
+  public async config({ request, response }: HttpContext) {
+    if(request.ip() !== '127.0.0.1') return response.forbidden()
+    
     const config: {[k: string]: any} = {  }
 
     const certificates = await Certificate.all()
