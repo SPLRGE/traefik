@@ -34,43 +34,27 @@
             <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
           </div>
         @end
-
-        @if(flashMessages.has('errorsBag.E_INVALID_CREDENTIALS'))
-          <div class="alert alert-danger alert-dismissible" role="alert">
-            <div class="d-flex">
-              <div>
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-exclamation-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 9v4" /><path d="M12 16v.01" /></svg>
-              </div>
-              <div>
-                <h4 class="alert-title">The provided email address or password is invalid</h4>
-              </div>
-            </div>
-            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-          </div>
-        @end
-
-
+        
         <div class="card card-md">
+          <div class="card-body text-center py-4 p-sm-5">
+              <img src="/img/sign_in.svg" height="120" class="mb-n2" alt="">
+              <h2 class="mt-5">Welcome to<br />Traefik Proxy Manager <span class="badge bg-blue-lt">beta</span></h2>
+              <p class="text-muted"><a href="https://labs.splrge.dev">SPLRGE Labs</a> created this application to efficiently manage our traefik proxy.</p>
+          </div>
+          <div class="hr-text hr-text-center hr-text-spaceless">Create your administrator account</div>
           <div class="card-body">
-            <h2 class="h2 text-center mb-4">Login to your account</h2>
-            <form action="{{ route('auth.login') }}" method="post" data-form-type="login">
+            <!--<h2 class="h2 text-center mb-4">Login to your account</h2>-->
+            <form action="{{ route('auth.setup') }}" method="post" data-form-type="register">
               {{ csrfField() }}
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" id="email" name="email" class="form-control" value="{{ old('email') ?? '' }}" placeholder="labs@splrge.dev">
+                <input type="email" id="email" name="email" class="form-control" placeholder="labs@splrge.dev">
               </div>
               <div class="mb-2">
                 <label for="password" class="form-label">
                   Password
                 </label>
-                <div class="input-group input-group-flat">
-                  <input type="password" id="password" name="password" class="form-control"  placeholder="MySecuredPassword!">
-                  <span class="input-group-text">
-                    <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
-                    </a>
-                  </span>
-                </div>
+                <input type="password" id="password" name="password" class="form-control"  placeholder="MySecuredPassword!">
               </div>
               <div class="form-footer">
                 <button type="submit" class="btn btn-primary w-100">Sign in</button>
@@ -81,7 +65,7 @@
           <div class="card-body">
             <div class="row">
                 <div class="col">
-                    <a href="#" class="btn w-100">
+                    <a href="{{ route('auth.redirect') }}" class="btn w-100">
                         @!icons.azure()
                         Login with Microsoft
                     </a>

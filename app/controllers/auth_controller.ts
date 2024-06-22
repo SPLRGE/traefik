@@ -1,8 +1,30 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from "#models/user";
+import { createFirstAccountValidator, loginValidator } from '#validators/auth';
 
 export default class AuthController {
-  constructor() {
+
+  public async index({ view }: HttpContext) {
+    if((await User.query()).length === 0) return view.render('pages/auth/create-first-account')
+    return view.render('pages/auth/login')
+  }
+
+  public async setup({ request, response }: HttpContext) {
+    if((await User.query()).length > 0) return response.redirect().toRoute('auth.index')
+
+    const { email, password } = await request.validateUsing(createFirstAccountValidator)
+    await User.create({ email, password })
+
+    return response.redirect().toRoute('auth.index')
+  }
+
+  public async login({ request, auth, response }: HttpContext) {
+    const { email, password } = await request.validateUsing(loginValidator)
+
+    const user = await User.verifyCredentials(email, password)
+    await auth.use('web').login(user)
+
+    return response.redirect().toRoute('dashboard.index')
   }
 
   public async redirect({ ally }: HttpContext) {
@@ -18,6 +40,10 @@ export default class AuthController {
     const microsoftUser = await microsoft.user()
     const user = await User.firstOrNew({ ssoId: microsoftUser.id }, { ssoId: microsoftUser.id })
 
+    if(microsoftUser.email && microsoftUser.email !== user.email) {
+      user.email = microsoftUser.email
+      user.$isPersisted = false
+    }
     if(!user.$isPersisted) await user.save()
 
     await auth.use('web').login(user)

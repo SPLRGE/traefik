@@ -16,7 +16,10 @@ import RoutesController from "#controllers/routes_controller";
 import ServicesController from "#controllers/services_controller";
 
 router.group(() => {
-  router.on('/').render('pages/auth/login').as('index')
+  router.get('/', [AuthController, 'index']).as('index')
+  router.post('/', [AuthController, 'login']).as('login')
+  
+  router.post('/setup', [AuthController, 'setup']).as('setup')
 
   router.get('/redirect', [AuthController, 'redirect']).as('redirect')
   router.get('/callback', [AuthController, 'callback']).as('callback')
