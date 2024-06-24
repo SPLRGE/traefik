@@ -29,4 +29,4 @@ FROM prepare as final
 ENV NODE_ENV=production
 COPY --from=build --chown=node:node /app/build .
 COPY --from=productionDependencies --chown=node:node /app/node_modules ./node_modules
-CMD ["/bin/sh", "-c", "node ace migration:run --force;dumb-init node bin/server.js"]
+CMD ["/bin/sh", "-c", "node ace migration:run --force && node ace db:seed && dumb-init node bin/server.js"]
