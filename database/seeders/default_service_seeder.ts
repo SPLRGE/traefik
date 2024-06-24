@@ -1,4 +1,5 @@
 import Service from '#models/service'
+import env from '#start/env'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
@@ -10,7 +11,7 @@ export default class extends BaseSeeder {
         id: 1,
         name: '[default] App',
         type: 'HTTP',
-        rawAddresses: 'localhost:3333'
+        rawAddresses: 'localhost:' + env.get('PORT')
       },
       {
         id: 2,
