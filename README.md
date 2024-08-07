@@ -2,7 +2,7 @@
 <img src="https://s3.splrge.dev/assets/brand/labs/banner_color.png">              
 </p> 
 
-<h1 align="center" style="font-weight: bold;">Traefik Proxy Manager</h1>
+<h1 align="center" style="font-weight: bold;">Traefik Proxy Manager <br /><code>beta</code></h1>
 <p align="center">Simply manage your Traefik Proxy with a web interface</p>
 
  
@@ -17,6 +17,8 @@
 3. Open the ``docker-compose.yml`` file and fill all the missing values 
 4. Start the stack with ``docker compose up -d`` 
 5. Open the admin dashboard on ``http://your-server-ip:3333`` and create your admin account 
+
+⚠ This project is still in beta and may not be fully functional. Opening issues is highly appreciated. 
 
 <h2 id="technologies">💻 Built with</h2>
 
