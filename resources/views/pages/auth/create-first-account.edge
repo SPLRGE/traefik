@@ -45,7 +45,6 @@
           <div class="card-body">
             <!--<h2 class="h2 text-center mb-4">Login to your account</h2>-->
             <form action="{{ route('auth.setup') }}" method="post" data-form-type="register">
-              {{ csrfField() }}
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" id="email" name="email" class="form-control" placeholder="labs@splrge.dev">
