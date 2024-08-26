@@ -1,12 +1,13 @@
-import {ChildProcessWithoutNullStreams, spawn} from "node:child_process";
-import {Logger} from "@adonisjs/core/logger";
+import { ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
+import { Logger } from '@adonisjs/core/logger'
 
 export default class Traefik {
+  protected PROCESS: ChildProcessWithoutNullStreams | null = null
 
-  protected PROCESS: ChildProcessWithoutNullStreams|null = null
-
-  constructor(protected executablePath: string, protected logger: Logger) {
-  }
+  constructor(
+    protected executablePath: string,
+    protected logger: Logger
+  ) {}
 
   async start() {
     this.PROCESS = spawn(this.executablePath, [
@@ -19,15 +20,15 @@ export default class Traefik {
       '--log.level=INFO',
     ])
 
-    this.PROCESS.stdout.on('data', data => {
+    this.PROCESS.stdout.on('data', (data) => {
       this.logger.info(`${data.toString().replace(/\n$/, '')}`)
     })
 
-    this.PROCESS.stderr.on('data', data => {
+    this.PROCESS.stderr.on('data', (data) => {
       this.logger.info(`${data.toString().replace(/\n$/, '')}`)
     })
 
-    this.PROCESS.on('close', code => {
+    this.PROCESS.on('close', (code) => {
       this.logger.info(`Traefik process exited with code ${code}`)
     })
   }
@@ -35,5 +36,4 @@ export default class Traefik {
   async shutdown() {
     this.PROCESS?.kill()
   }
-
 }

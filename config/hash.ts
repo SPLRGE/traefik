@@ -17,8 +17,8 @@ const hashConfig = defineConfig({
       memory: 65536,
       parallelism: 4,
       saltSize: 16,
-      hashLength: 32
-    })
+      hashLength: 32,
+    }),
   },
 })
 

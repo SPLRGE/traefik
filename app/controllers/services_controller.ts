@@ -1,13 +1,14 @@
-import type {HttpContext} from "@adonisjs/core/http";
-import Service from "#models/service";
-import {createServiceValidator} from "#validators/service";
+import type { HttpContext } from '@adonisjs/core/http'
+import Service from '#models/service'
+import { createServiceValidator } from '#validators/service'
 
 export default class ServicesController {
-
   async index({ view }: HttpContext) {
     const services = await Service.query().orderBy('id', 'asc')
 
-    return view.render('pages/services', { services: services.map(service => service.serialize()) })
+    return view.render('pages/services', {
+      services: services.map((service) => service.serialize()),
+    })
   }
 
   async store({ request, response, session }: HttpContext) {
@@ -26,5 +27,4 @@ export default class ServicesController {
     session.flash('success', 'Service deleted successfully')
     return response.redirect().toRoute('dashboard.services.index')
   }
-
 }

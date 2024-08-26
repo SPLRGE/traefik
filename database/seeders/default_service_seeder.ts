@@ -11,14 +11,14 @@ export default class extends BaseSeeder {
         id: 1,
         name: '[default] App',
         type: 'HTTP',
-        rawAddresses: 'localhost:' + env.get('PORT')
+        rawAddresses: 'localhost:' + env.get('PORT'),
       },
       {
         id: 2,
         name: '[default] Traefik Dashboard',
         type: 'HTTP',
-        rawAddresses: 'localhost:8080'
-      }
+        rawAddresses: 'localhost:8080',
+      },
     ])
   }
 }

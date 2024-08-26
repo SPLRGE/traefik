@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import {BaseModel, column, hasOne} from '@adonisjs/lucid/orm'
-import Service from "#models/service";
-import type {HasOne} from "@adonisjs/lucid/types/relations";
+import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
+import Service from '#models/service'
+import type { HasOne } from '@adonisjs/lucid/types/relations'
 
 export default class Route extends BaseModel {
   @column({ isPrimary: true })

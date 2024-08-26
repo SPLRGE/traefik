@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import {BaseModel, column, computed} from '@adonisjs/lucid/orm'
+import { BaseModel, column, computed } from '@adonisjs/lucid/orm'
 
 export default class Service extends BaseModel {
   @column({ isPrimary: true })
@@ -9,7 +9,7 @@ export default class Service extends BaseModel {
   declare name: string
 
   @column()
-  declare type: 'HTTP'|'HTTPS'|'UDP'|'TCP'
+  declare type: 'HTTP' | 'HTTPS' | 'UDP' | 'TCP'
 
   @column({ columnName: 'addresses' })
   declare rawAddresses: string

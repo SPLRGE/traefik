@@ -3,7 +3,7 @@ name: ci Docker Release
 permissions:
   contents: read
   packages: write
-  
+
 on:
   release:
     types: [created]

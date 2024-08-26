@@ -31,7 +31,7 @@ const loggerConfig = defineConfig({
           .pushIf(app.inProduction, targets.file({ destination: 2 }))
           .toArray(),
       },
-    }
+    },
   },
 })
 

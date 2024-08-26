@@ -8,6 +8,9 @@ export const createRouteValidator = vine.compile(
     service: vine.string(), //TODO: Add exist rule
     serviceName: vine.string().optional().requiredWhen('service', '=', 'add-new'),
     serviceAddress: vine.string().optional().requiredWhen('service', '=', 'add-new'),
-    serviceType: vine.enum(['HTTP', 'HTTPS', 'TCP', 'UDP']).optional().requiredWhen('service', '=', 'add-new'),
+    serviceType: vine
+      .enum(['HTTP', 'HTTPS', 'TCP', 'UDP'])
+      .optional()
+      .requiredWhen('service', '=', 'add-new'),
   })
 )
